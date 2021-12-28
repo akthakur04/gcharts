@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .chartBox {
+        width: 700px;
+        padding: 20px;
+        border-radius: 20px;
+        background: white;
+      }
+     </style>
+</head>
+<body>
+<script
+src="https://www.gstatic.com/charts/loader.js">
+</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js" integrity="sha512-qa1o08MA0596eSNsnkRv5vuGloSKUhY09O31MY2OJpODjUVlaL0GOJJcyt7J7Z61FiEgHMgBkH04ZJ+vcuLs/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+<div class="chartCard">
+
+      <div class="chartBox">
+          <div id="myChart" style="max-width:1200px; height:600px"></div>
+          <button id="savepdf" > DOWNLOAD </button>
+      </div>
+</div>
+<script>
+google.charts.load('current',{packages:['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart()
+{
+    var data = google.visualization.arrayToDataTable([
+      ['DAY' , 'WEEKLY SALES',{ role: 'style' }],
+
+    ['MON', 18,'color: #ff1a68; opacity: 0.2; border: 3;'],
+      ['TUES', 12,'color: #36a2eb; opacity: 0.2; border: 3;'],
+      ['WED', 6,'color: #ffce56; opacity: 0.2; border: 3;'],
+      ['THURS',9,'color: #4bc0c0; opacity: 0.2; border: 3;'],
+      ['FRI', 12,'color: #9966ff; opacity: 0.2; border: 3;'],
+      ['SAT', 3, 'color: #ff9f40; opacity: 0.2; border: 3;'],
+      ['SUN', 9,'color: #000000; opacity: 0.2; border: 3;']
+]);
+        var options = {
+
+             hAxis: {
+        gridlines: {
+            color: '#00ff00' //Green lines for debugging purposes
+        },
+       },
+
+
+            vAxis: {
+            gridlines : {
+              count : 8
+            }
+          },
+
+          legend: { position: 'top'},
+
+          };
+    let chart = new google.visualization.ColumnChart(document.getElementById('myChart'));
+
+    chart.draw(data, options);
+
+let btnSave= document.getElementById('savepdf');
+     btnSave.addEventListener('click', function () {
+        var doc = new jsPDF();
+        chartimage=chart.getImageURI('data:image/svg+xml;utf8,',1.0),
+        doc.addImage(chartimage,'SVG', 1,1,200,150);
+            doc.setFontSize(20);
+
+        doc.text(15,10,'My chart using Google chart')
+
+        doc.save('googlechart.pdf');
+       }, false);
+       }
+
+
+
+/*function downloadPDF(){
+    const chart1 = document.getElementById('myChart');
+            const canvasImage = chart1.toDataURL('data:image/svg+xml;utf8,',1.0);
+
+    let pdf= new jsPDF('landscape');
+    pdf.addImage(canvasImage, 'SVG', 15,15,280,150);
+    pdf.setFontSize(20);
+    pdf.text(15,10,'My chart using Chart js')
+    pdf.save('myGOOGLEchart.pdf');
+
+}*/
+
+</script>
+</body>
+</html>
